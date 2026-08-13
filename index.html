@@ -104,7 +104,6 @@
 <p class="p1">&lt;script&gt;</p>
 <p class="p1">// ======================== 北师大版 模拟数据（请替换为真实数据） ========================</p>
 <p class="p1">const baseData = {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 年级 -&gt; 册次 -&gt; 知识点列表</p>
 <p class="p1"><span class="Apple-converted-space">    </span>"1": {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>"上": [</p>
 <p class="p1"><span class="Apple-converted-space">            </span>{ id: "1-上-1", name: "数一数", video: "https://www.example.com/video1.mp4", questions: [{ q: "3+2=?", options: ["4","5","6"], answer: 1 }] },</p>
@@ -122,14 +121,13 @@
 <p class="p1"><span class="Apple-converted-space">            </span>{ id: "2-下-1", name: "有余数的除法", video: "https://www.example.com/video5.mp4", questions: [{ q: "7÷3=？余几？", options: ["1","2","3"], answer: 1 }] }</p>
 <p class="p1"><span class="Apple-converted-space">        </span>]</p>
 <p class="p1"><span class="Apple-converted-space">    </span>},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 其他年级类似... 此处省略，实际使用时请补全所有年级和知识点</p>
 <p class="p1"><span class="Apple-converted-space">    </span>"3": { "上": [], "下": [] },</p>
 <p class="p1"><span class="Apple-converted-space">    </span>"4": { "上": [], "下": [] },</p>
 <p class="p1"><span class="Apple-converted-space">    </span>"5": { "上": [], "下": [] },</p>
 <p class="p1"><span class="Apple-converted-space">    </span>"6": { "上": [], "下": [] }</p>
 <p class="p1">};</p>
 <p class="p2"><br></p>
-<p class="p1">// 补充完整（为了让演示更丰富，为3-6年级也加几个占位知识点）</p>
+<p class="p1">// 补充占位（让演示更丰富）</p>
 <p class="p1">for (let g=3; g&lt;=6; g++) {</p>
 <p class="p1"><span class="Apple-converted-space">    </span>baseData[g] = {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>"上": [</p>
@@ -145,7 +143,7 @@
 <p class="p1">// ======================== 应用状态 ========================</p>
 <p class="p1">let currentGrade = '1';</p>
 <p class="p1">let currentSemester = '上';</p>
-<p class="p1">let currentKnowledge = null; <span class="Apple-converted-space">      </span>// 当前选中的知识点对象</p>
+<p class="p1">let currentKnowledge = null;</p>
 <p class="p1">let currentQuestionIndex = 0;</p>
 <p class="p1">let wrongQuestions = JSON.parse(localStorage.getItem('wrongQuestions')) || [];</p>
 <p class="p2"><br></p>
@@ -199,7 +197,6 @@
 <p class="p1"><span class="Apple-converted-space">        </span>});</p>
 <p class="p1"><span class="Apple-converted-space">        </span>knowledgeList.appendChild(div);</p>
 <p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 如果当前没有选中知识点，清空视频和练习</p>
 <p class="p1"><span class="Apple-converted-space">    </span>if (data.length === 0) {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>hideVideoAndExercise();</p>
 <p class="p1"><span class="Apple-converted-space">    </span>}</p>
@@ -207,9 +204,7 @@
 <p class="p2"><br></p>
 <p class="p1">function showVideo(url) {</p>
 <p class="p1"><span class="Apple-converted-space">    </span>videoContainer.style.display = 'block';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>videoIframe.src = url; // 实际使用时，可能是视频地址，这里直接赋值</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 如果是普通mp4，可用video标签，但为了演示，我们用iframe，假设是网页视频或可嵌入链接</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 为了支持mp4，可改用&lt;video&gt;，这里简单处理</p>
+<p class="p1"><span class="Apple-converted-space">    </span>videoIframe.src = url;</p>
 <p class="p1">}</p>
 <p class="p2"><br></p>
 <p class="p1">function hideVideoAndExercise() {</p>
@@ -247,11 +242,9 @@
 <p class="p1"><span class="Apple-converted-space">    </span>feedback.textContent = '';</p>
 <p class="p1"><span class="Apple-converted-space">    </span>submitBtn.style.display = 'inline-block';</p>
 <p class="p1"><span class="Apple-converted-space">    </span>nextBtn.style.display = 'inline-block';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 重置选项</p>
 <p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('input[name="option"]').forEach(el =&gt; el.checked = false);</p>
 <p class="p1">}</p>
 <p class="p2"><br></p>
-<p class="p1">// ======================== 练习逻辑 ========================</p>
 <p class="p1">submitBtn.addEventListener('click', () =&gt; {</p>
 <p class="p1"><span class="Apple-converted-space">    </span>const selected = document.querySelector('input[name="option"]:checked');</p>
 <p class="p1"><span class="Apple-converted-space">    </span>if (!selected) {</p>
@@ -266,7 +259,6 @@
 <p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>feedback.textContent = '❌ 错误，已加入错题本';</p>
 <p class="p1"><span class="Apple-converted-space">        </span>feedback.style.color = '#e53e3e';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// 保存错题</p>
 <p class="p1"><span class="Apple-converted-space">        </span>const wrong = {</p>
 <p class="p1"><span class="Apple-converted-space">            </span>grade: currentGrade,</p>
 <p class="p1"><span class="Apple-converted-space">            </span>semester: currentSemester,</p>
@@ -287,18 +279,17 @@
 <p class="p1"><span class="Apple-converted-space">    </span>if (currentQuestionIndex &lt; questions.length) {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>renderQuestion(questions, currentQuestionIndex);</p>
 <p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>renderQuestion(questions, questions.length); // 显示完成</p>
+<p class="p1"><span class="Apple-converted-space">        </span>renderQuestion(questions, questions.length);</p>
 <p class="p1"><span class="Apple-converted-space">    </span>}</p>
 <p class="p1">});</p>
 <p class="p2"><br></p>
-<p class="p1">// ======================== 错题本 ========================</p>
 <p class="p1">function renderWrongBook() {</p>
 <p class="p1"><span class="Apple-converted-space">    </span>if (wrongQuestions.length === 0) {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>wrongList.innerHTML = '&lt;p style="color:#718096;"&gt;暂无错题，继续加油！&lt;/p&gt;';</p>
 <p class="p1"><span class="Apple-converted-space">        </span>return;</p>
 <p class="p1"><span class="Apple-converted-space">    </span>}</p>
 <p class="p1"><span class="Apple-converted-space">    </span>wrongList.innerHTML = '';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>wrongQuestions.slice().reverse().forEach((item, idx) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>wrongQuestions.slice().reverse().forEach((item) =&gt; {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>const div = document.createElement('div');</p>
 <p class="p1"><span class="Apple-converted-space">        </span>div.className = 'wrong-item';</p>
 <p class="p1"><span class="Apple-converted-space">        </span>div.innerHTML = `</p>
@@ -319,7 +310,6 @@
 <p class="p1"><span class="Apple-converted-space">    </span>}</p>
 <p class="p1">});</p>
 <p class="p2"><br></p>
-<p class="p1">// ======================== 册次切换 ========================</p>
 <p class="p1">semesterTabs.addEventListener('click', (e) =&gt; {</p>
 <p class="p1"><span class="Apple-converted-space">    </span>if (e.target.classList.contains('semester-tab')) {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>document.querySelectorAll('.semester-tab').forEach(t =&gt; t.classList.remove('active'));</p>
@@ -330,27 +320,19 @@
 <p class="p1"><span class="Apple-converted-space">    </span>}</p>
 <p class="p1">});</p>
 <p class="p2"><br></p>
-<p class="p1">// ======================== Toast ========================</p>
 <p class="p1">function showToast(msg) {</p>
 <p class="p1"><span class="Apple-converted-space">    </span>toast.textContent = msg;</p>
 <p class="p1"><span class="Apple-converted-space">    </span>toast.classList.add('show');</p>
 <p class="p1"><span class="Apple-converted-space">    </span>setTimeout(() =&gt; toast.classList.remove('show'), 2000);</p>
 <p class="p1">}</p>
 <p class="p2"><br></p>
-<p class="p1">// ======================== 初始化 ========================</p>
 <p class="p1">renderGradeButtons();</p>
 <p class="p1">renderKnowledge();</p>
 <p class="p1">renderWrongBook();</p>
 <p class="p1">hideVideoAndExercise();</p>
 <p class="p2"><br></p>
-<p class="p1">// ======================== 扩展：自动播放视频（占位） ========================</p>
-<p class="p1">// 如果视频链接是mp4，可改为video标签，这里为了演示，直接使用iframe加载任意链接</p>
-<p class="p1">// 实际项目中，可替换为真正的视频地址或embed代码</p>
-<p class="p2"><br></p>
 <p class="p1">console.log('✅ 小学数学宝典（北师大版）已启动！');</p>
-<p class="p1">console.log('💡 请替换 baseData 中的视频链接和题目数据为真实内容。');</p>
 <p class="p1">&lt;/script&gt;</p>
-<p class="p2"><br></p>
 <p class="p1">&lt;/body&gt;</p>
 <p class="p1">&lt;/html&gt;</p>
 </body>
